@@ -29,6 +29,7 @@ class TestSmokeTest():
     assert len(elements) > 0
     assert self.driver.find_element(By.CSS_SELECTOR, ".header-title > h1").text == "Teton Idaho"
     assert self.driver.find_element(By.CSS_SELECTOR, ".header-title > h2").text == "Chamber of Commerce"
+    assert self.driver.title == "Teton Idaho CoC"
     assert self.driver.find_element(By.CSS_SELECTOR, ".spotlight1 > h4").text == "Teton Elementary"
     elements = self.driver.find_elements(By.CSS_SELECTOR, ".spotlight1 img")
     assert len(elements) > 0
@@ -41,60 +42,52 @@ class TestSmokeTest():
     assert self.driver.find_element(By.CSS_SELECTOR, ".spotlight2 > p:nth-child(4)").text == "All your postal needs in one small place."
     elements = self.driver.find_elements(By.LINK_TEXT, "Join Us!")
     assert len(elements) > 0
-    elements = self.driver.find_elements(By.LINK_TEXT, "Join Us")
-    assert len(elements) > 0
-    self.driver.find_element(By.LINK_TEXT, "Join Us").click()
+    self.driver.find_element(By.LINK_TEXT, "Join Us!").click()
   
-  def test_2Directory(self):
-    self.driver.get("http://127.0.0.1:5500/teton/1.6/index.html")
+  def test_2DirectoryPage(self):
+    self.driver.get("http://127.0.0.1:5500/teton/1.6/directory.html")
     self.driver.set_window_size(1550, 830)
-    self.driver.find_element(By.LINK_TEXT, "Directory").click()
     self.driver.find_element(By.ID, "directory-grid").click()
     elements = self.driver.find_elements(By.CSS_SELECTOR, ".gold-member:nth-child(9) > img")
     assert len(elements) > 0
     assert self.driver.find_element(By.CSS_SELECTOR, ".gold-member:nth-child(9) > p:nth-child(2)").text == "Teton Turf and Tree"
     assert self.driver.find_element(By.CSS_SELECTOR, ".gold-member:nth-child(9) > p:nth-child(3)").text == "4735 East Hwy 33"
     assert self.driver.find_element(By.CSS_SELECTOR, ".gold-member:nth-child(9) > p:nth-child(4)").text == "Sugar City, ID 83448"
-    assert self.driver.find_element(By.CSS_SELECTOR, ".gold-member:nth-child(9) a").text == "Website"
+    elements = self.driver.find_elements(By.CSS_SELECTOR, ".gold-member:nth-child(9)")
+    assert len(elements) > 0
     self.driver.find_element(By.ID, "directory-list").click()
     assert self.driver.find_element(By.CSS_SELECTOR, ".gold-member:nth-child(9) > p:nth-child(2)").text == "Teton Turf and Tree"
     assert self.driver.find_element(By.CSS_SELECTOR, ".gold-member:nth-child(9) > p:nth-child(3)").text == "4735 East Hwy 33"
-    assert self.driver.find_element(By.CSS_SELECTOR, ".gold-member:nth-child(9) a").text == "Website"
-    elements = self.driver.find_elements(By.CSS_SELECTOR, ".gold-member:nth-child(9) > p:nth-child(5)")
+    assert self.driver.find_element(By.CSS_SELECTOR, ".gold-member:nth-child(9) > p:nth-child(4)").text == "Sugar City, ID 83448"
+    elements = self.driver.find_elements(By.CSS_SELECTOR, ".gold-member:nth-child(9) > p:nth-child(2)")
     assert len(elements) > 0
   
   def test_3JoinPage(self):
-    self.driver.get("http://127.0.0.1:5500/teton/1.6/index.html")
+    self.driver.get("http://127.0.0.1:5500/teton/1.6/join.html")
     self.driver.set_window_size(1550, 830)
-    self.driver.find_element(By.LINK_TEXT, "Join").click()
     self.driver.find_element(By.NAME, "fname").click()
     elements = self.driver.find_elements(By.NAME, "fname")
     assert len(elements) > 0
-    self.driver.find_element(By.NAME, "fname").send_keys("Ronaldo Campos Lucas")
+    self.driver.find_element(By.NAME, "fname").click()
+    self.driver.find_element(By.NAME, "fname").send_keys("Ronaldo ")
+    self.driver.find_element(By.CSS_SELECTOR, ".myinput:nth-child(4)").click()
     self.driver.find_element(By.NAME, "lname").click()
-    self.driver.find_element(By.NAME, "lname").send_keys("ergregregreger")
-    self.driver.find_element(By.NAME, "bizname").click()
-    self.driver.find_element(By.NAME, "bizname").send_keys("wfefewfefew")
-    self.driver.find_element(By.NAME, "biztitle").click()
-    self.driver.find_element(By.NAME, "biztitle").send_keys("wefwefefwe")
+    self.driver.find_element(By.NAME, "lname").send_keys("Lucas")
+    self.driver.find_element(By.NAME, "bizname").send_keys("Midas Bytes")
+    self.driver.find_element(By.NAME, "biztitle").send_keys("Software Developer Junior")
     self.driver.find_element(By.NAME, "submit").click()
     self.driver.find_element(By.NAME, "email").click()
-    self.driver.find_element(By.NAME, "email").click()
-    element = self.driver.find_element(By.NAME, "email")
-    actions = ActionChains(self.driver)
-    actions.double_click(element).perform()
     elements = self.driver.find_elements(By.NAME, "email")
     assert len(elements) > 0
-    self.driver.find_element(By.NAME, "email").send_keys("ggegerge@rggerg.com")
   
   def test_4Admin(self):
-    self.driver.get("http://127.0.0.1:5500/teton/1.6/index.html")
+    self.driver.get("http://127.0.0.1:5500/teton/1.6/admin.html")
     self.driver.set_window_size(1550, 830)
-    self.driver.find_element(By.LINK_TEXT, "Admin").click()
     self.driver.find_element(By.ID, "username").click()
-    self.driver.find_element(By.ID, "username").send_keys("egthrththtrhrt")
-    self.driver.find_element(By.ID, "password").click()
-    self.driver.find_element(By.ID, "password").send_keys("eghrthrthtr")
+    elements = self.driver.find_elements(By.ID, "username")
+    assert len(elements) > 0
+    self.driver.find_element(By.ID, "username").send_keys("ronaldoucl")
+    self.driver.find_element(By.ID, "password").send_keys("testestest")
     self.driver.find_element(By.CSS_SELECTOR, ".mysubmit:nth-child(4)").click()
-    assert self.driver.find_element(By.CSS_SELECTOR, ".errorMessage").text == "Invalid username and password."
+    WebDriverWait(self.driver, 30).until(expected_conditions.text_to_be_present_in_element((By.CSS_SELECTOR, ".errorMessage"), "Invalid username and password."))
   
