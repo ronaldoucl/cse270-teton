@@ -5,7 +5,7 @@ import json
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
@@ -75,8 +75,17 @@ class TestSmokeTest():
     self.driver.find_element(By.NAME, "lname").send_keys("Lucas")
     self.driver.find_element(By.NAME, "bizname").send_keys("Midas Bytes")
     self.driver.find_element(By.NAME, "biztitle").send_keys("Software Developer Junior")
+
+    time.sleep(0.5)
+
     self.driver.find_element(By.NAME, "submit").click()
-    self.driver.find_element(By.NAME, "email").click()
+
+    wait = WebDriverWait(self.driver, 10)
+    email_input = wait.until(EC.presence_of_element_located((By.NAME, "email")))  # ✅ agregado
+
+    email_input.click()
+    email_input.send_keys("ronaldo@example.com") 
+
     elements = self.driver.find_elements(By.NAME, "email")
     assert len(elements) > 0
   
@@ -89,5 +98,6 @@ class TestSmokeTest():
     self.driver.find_element(By.ID, "username").send_keys("ronaldoucl")
     self.driver.find_element(By.ID, "password").send_keys("testestest")
     self.driver.find_element(By.CSS_SELECTOR, ".mysubmit:nth-child(4)").click()
-    WebDriverWait(self.driver, 30).until(expected_conditions.text_to_be_present_in_element((By.CSS_SELECTOR, ".errorMessage"), "Invalid username and password."))
-  
+    WebDriverWait(self.driver, 30).until(
+      EC.text_to_be_present_in_element((By.CSS_SELECTOR, ".errorMessage"), "Invalid username and password.")
+    )
