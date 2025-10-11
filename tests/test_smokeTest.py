@@ -65,13 +65,11 @@ class TestSmokeTest():
   def test_3JoinPage(self):
     self.driver.get("http://127.0.0.1:5500/teton/1.6/join.html")
     self.driver.set_window_size(1550, 830)
+
     self.driver.find_element(By.NAME, "fname").click()
     elements = self.driver.find_elements(By.NAME, "fname")
     assert len(elements) > 0
-    self.driver.find_element(By.NAME, "fname").click()
     self.driver.find_element(By.NAME, "fname").send_keys("Ronaldo ")
-    self.driver.find_element(By.CSS_SELECTOR, ".myinput:nth-child(4)").click()
-    self.driver.find_element(By.NAME, "lname").click()
     self.driver.find_element(By.NAME, "lname").send_keys("Lucas")
     self.driver.find_element(By.NAME, "bizname").send_keys("Midas Bytes")
     self.driver.find_element(By.NAME, "biztitle").send_keys("Software Developer Junior")
@@ -81,10 +79,24 @@ class TestSmokeTest():
     self.driver.find_element(By.NAME, "submit").click()
 
     wait = WebDriverWait(self.driver, 10)
-    email_input = wait.until(EC.presence_of_element_located((By.NAME, "email")))  # ✅ agregado
+    wait.until(lambda d: d.execute_script("return document.readyState") == "complete")
 
-    email_input.click()
-    email_input.send_keys("ronaldo@example.com") 
+    for attempt in range(3):
+        try:
+            email_input = wait.until(
+                EC.presence_of_element_located((By.NAME, "email"))
+            )
+          
+            email_input.click()
+            email_input.send_keys("ronaldo@example.com")
+            break  
+        except Exception as e:
+            if "stale element reference" in str(e).lower():
+                print(f"Reintentando localizar elemento email (intento {attempt+1})...")
+                time.sleep(0.5)
+                continue  
+            else:
+                raise 
 
     elements = self.driver.find_elements(By.NAME, "email")
     assert len(elements) > 0
